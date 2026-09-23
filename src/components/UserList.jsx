@@ -3,10 +3,11 @@ import UserDetails from "./UserDetails";
 import UserListItem from "./UserListItem";
 
 export default function UserList({ users }) {
-
+    const [selectedUserId, setSelectedUserId] = useState(null);
     const [showUserDetails, setShowUserDetails] = useState(false);
 
-    const showUserDetailsHandler = () => {
+    const showUserDetailsHandler = (userId) => {
+        setSelectedUserId(userId);
         setShowUserDetails(true);
     }
 
@@ -119,7 +120,7 @@ export default function UserList({ users }) {
                 </tbody>
             </table>
 
-            {showUserDetails && <UserDetails />}
+            {showUserDetails && <UserDetails userId={selectedUserId} />}
         </div>
     );
 }
