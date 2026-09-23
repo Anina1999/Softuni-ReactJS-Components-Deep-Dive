@@ -1,7 +1,7 @@
 import { fromIsoDate } from "../utils/dateTimeUtils";
 
 export default function UserListItem({ 
-    id, 
+    _id, 
     firstName, 
     lastName, 
     email, 
