@@ -1,6 +1,14 @@
 import { fromIsoDate } from "../utils/dateTimeUtils";
 
-export default function UserListItem({ id, firstName, lastName, email, phoneNumber, createdAt, imageUrl }) {
+export default function UserListItem({ 
+    id, 
+    firstName, 
+    lastName, 
+    email, 
+    phoneNumber, 
+    createdAt, 
+    imageUrl 
+}) {
     return (
         <tr>
             <td>
