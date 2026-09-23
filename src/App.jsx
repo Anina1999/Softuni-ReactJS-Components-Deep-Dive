@@ -14,9 +14,8 @@ function App() {
     const [showSaveUserModal, setShowSaveUserModal] = useState(false);
 
     useEffect(() => {
-        fetch("http://localhost:3030/jsonstore/users")
-            .then((response) => response.json())
-            .then((data) => setUsers(Object.values(data)))
+        fetchUsers()
+            .then((data) => setUsers(data))
             .catch((error) => console.error("Error fetching users:", error));
     }, []);
     
@@ -28,20 +27,27 @@ function App() {
         setShowSaveUserModal(false);
     }
 
-    const submitUserHandler = (userData) => {
-        fetch(baseUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            setUsers((prevUsers) => [...prevUsers, data]);
+    const submitUserHandler = async (userData) => {
+        try {
+            //Send user to REST API
+            await fetch(baseUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userData),
+            });
+
+            //Fetch All users after adding a new one 
+            const updatedUsers = await fetchUsers();
+
+            //Update state
+            setUsers(updatedUsers);
+        } catch (error) {
+            alert("Error adding user:", error)
+        } finally {
             setShowSaveUserModal(false);
-        })
-        .catch((error) => alert("Error adding user:", error))
+        }
     }
 
     return (
@@ -67,6 +73,13 @@ function App() {
         </>
 
     )
+}
+
+async function fetchUsers() {
+    const response = await fetch(baseUrl);
+    const data = await response.json();
+
+    return Object.values(data);
 }
 
 export default App

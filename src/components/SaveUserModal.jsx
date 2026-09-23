@@ -13,6 +13,7 @@ export default function SaveUserModal({
             lastName: formData.get("lastName"),
             email: formData.get("email"),
             phoneNumber: formData.get("phoneNumber"),
+            createdAt: new Date().toISOString(),
             imageUrl: formData.get("imageUrl"),
             address: {
                 country: formData.get("country"),
