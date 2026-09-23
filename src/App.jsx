@@ -7,6 +7,8 @@ import UserSearch from "./components/UserSearch";
 import "./styles.css";
 import SaveUserModal from "./components/SaveUserModal";
 
+const baseUrl = "http://localhost:3030/jsonstore/users";
+
 function App() {
     const [users, setUsers] = useState([]);
     const [showSaveUserModal, setShowSaveUserModal] = useState(false);
@@ -26,6 +28,22 @@ function App() {
         setShowSaveUserModal(false);
     }
 
+    const submitUserHandler = (userData) => {
+        fetch(baseUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            setUsers((prevUsers) => [...prevUsers, data]);
+            setShowSaveUserModal(false);
+        })
+        .catch((error) => alert("Error adding user:", error))
+    }
+
     return (
         <>
             < Header />
@@ -39,7 +57,7 @@ function App() {
                     <button className="btn-add btn" onClick={addUserClickHandler}>
                         Add new user
                     </button>
-                    {showSaveUserModal && <SaveUserModal onClose={addUserCloseHandler} />}
+                    {showSaveUserModal && <SaveUserModal onClose={addUserCloseHandler} onSubmit={submitUserHandler} />}
 
                     <Pagination />
                 </section>
