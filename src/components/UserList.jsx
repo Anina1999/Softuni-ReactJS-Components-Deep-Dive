@@ -1,19 +1,46 @@
 import { useState } from "react";
 import UserDetails from "./UserDetails";
 import UserListItem from "./UserListItem";
+import UserDeleteModal from "./UserDeleteModal";
 
-export default function UserList({ users }) {
+const baseUrl = "http://localhost:3030/jsonstore/users";
+
+export default function UserList({ 
+    users,
+    onUserUpdate
+}) {
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [showUserDetails, setShowUserDetails] = useState(false);
+    const [showUserDelete, setShowUserDelete] = useState(false);
 
     const showUserDetailsHandler = (userId) => {
         setSelectedUserId(userId);
         setShowUserDetails(true);
     };
 
-    const hideUserDetailsHandler = () => {
+    const hideModalHandler = () => {
         setShowUserDetails(false);
+        setShowUserDelete(false);
         setSelectedUserId(null);
+    }
+
+    const showUserDeleteHandler = (userId) => {
+        setSelectedUserId(userId);
+        setShowUserDelete(true);
+    }
+
+    const deleteUserHandler = async () => {
+        try {
+            await fetch(`${baseUrl}/${selectedUserId}`, {
+                method: 'DELETE',
+            });
+
+            onUserUpdate();
+        } catch (error) {
+            console.error('Failed to delete user:', error);
+        } finally {
+            hideModalHandler();
+        }
     }
 
     return (
@@ -121,13 +148,15 @@ export default function UserList({ users }) {
                         {users.map(user => <UserListItem 
                         key={user._id} 
                         onInfo={showUserDetailsHandler}
+                        onDelete={showUserDeleteHandler}
                         {...user} />
                     )}
                     </tbody>
                 </table>
             </div>
 
-            {showUserDetails && <UserDetails userId={selectedUserId} onClose={hideUserDetailsHandler}/>}
+            {showUserDetails && <UserDetails userId={selectedUserId} onClose={hideModalHandler}/>}
+            {showUserDelete && <UserDeleteModal onClose={hideModalHandler} onDelete={deleteUserHandler}/>}
         </>
     );
 }

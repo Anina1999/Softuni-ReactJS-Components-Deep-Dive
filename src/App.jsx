@@ -6,6 +6,7 @@ import UserList from "./components/UserList";
 import UserSearch from "./components/UserSearch";
 import "./styles.css";
 import SaveUserModal from "./components/SaveUserModal";
+import { fetchUsers } from "./api/usersApi";
 
 const baseUrl = "http://localhost:3030/jsonstore/users";
 
@@ -50,6 +51,15 @@ function App() {
         }
     }
 
+    const userUpdateHandler = async () => {
+        try {
+            const updatedUsers = await fetchUsers();
+            setUsers(updatedUsers);
+        } catch (error) {
+            console.error('Error updating users:', error);
+        }
+    }
+
     return (
         <>
             < Header />
@@ -58,7 +68,7 @@ function App() {
                 <section className="card users-container">
                     <UserSearch />
 
-                    <UserList users={users}/>      
+                    <UserList users={users} onUserUpdate={userUpdateHandler}/>      
 
                     <button className="btn-add btn" onClick={addUserClickHandler}>
                         Add new user
@@ -75,11 +85,6 @@ function App() {
     )
 }
 
-async function fetchUsers() {
-    const response = await fetch(baseUrl);
-    const data = await response.json();
 
-    return Object.values(data);
-}
 
 export default App
