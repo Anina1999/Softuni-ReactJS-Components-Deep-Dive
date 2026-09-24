@@ -9,7 +9,8 @@ export default function UserListItem({
     createdAt, 
     imageUrl,
     onInfo,
-    onDelete
+    onDelete,
+    onEdit
 }) {
     return (
         <tr>
@@ -26,7 +27,7 @@ export default function UserListItem({
             <td>{phoneNumber}</td>
             <td>{fromIsoDate(createdAt)}</td>
             <td className="actions">
-                <button className="btn edit-btn" title="Edit">
+                <button className="btn edit-btn" title="Edit" onClick={() => {onEdit(_id)}}>
                     <svg
                         aria-hidden="true"
                         focusable="false"

@@ -1,7 +1,25 @@
+import { useEffect, useState } from "react";
+
+const baseUrl = "http://localhost:3030/jsonstore/users";
+
 export default function SaveUserModal({ 
     onClose,
-    onSubmit 
+    onSubmit,
+    edit,
+    userId
 }) {
+
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        if (!userId) {
+            return;
+        }
+
+        fetch(`${baseUrl}/${userId}`)
+            .then(response => response.json())
+            .then(data => setUser(data))
+    }, [userId, edit])
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -32,7 +50,7 @@ export default function SaveUserModal({
             <div className="modal">
                 <div className="user-container">
                     <header className="headers">
-                        <h2>Add User</h2>
+                        <h2>{edit? 'Edit User' : 'Add User'}</h2>
                         <button className="btn close" onClick={onClose}>
                             <svg
                                 aria-hidden="true"

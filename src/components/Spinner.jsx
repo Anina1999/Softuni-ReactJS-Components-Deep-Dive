@@ -1,9 +1,9 @@
 export default function Spinner() {
     return (
 
-        <div class="loading-shade">
+        <div className="loading-shade">
             {/* Loading spinner */}
-            <div class="spinner"></div>
+            <div className="spinner"></div>
             {/* No users added yet */}
             {/* <div class="table-overlap">
                 <svg
