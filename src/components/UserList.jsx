@@ -52,7 +52,23 @@ export default function UserList({
         setShowUserEdit(true);
     }
 
-    
+    const editUserSubmitHandler = async (userData) => {
+        try {
+            await fetch(`${baseUrl}/${selectedUserId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+
+            onUserUpdate();
+        } catch (error) {
+            console.error('Failed to update user:', error);
+        } finally {
+            hideModalHandler();
+        }
+    }
 
     return (
         <>
@@ -170,7 +186,7 @@ export default function UserList({
 
             {showUserDetails && <UserDetails userId={selectedUserId} onClose={hideModalHandler} />}
             {showUserDelete && <UserDeleteModal onClose={hideModalHandler} onDelete={deleteUserHandler} />}
-            {showUserEdit && <SaveUserModal userId={selectedUserId} onClose={hideModalHandler} edit />}
+            {showUserEdit && <SaveUserModal userId={selectedUserId} onClose={hideModalHandler} onSubmit={editUserSubmitHandler} edit />}
         </>
     );
 }
