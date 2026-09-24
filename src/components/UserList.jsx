@@ -2,6 +2,7 @@ import { useState } from "react";
 import UserDetails from "./UserDetails";
 import UserListItem from "./UserListItem";
 import UserDeleteModal from "./UserDeleteModal";
+import Spinner from "./Spinner";
 
 const baseUrl = "http://localhost:3030/jsonstore/users";
 
@@ -145,6 +146,7 @@ export default function UserList({
                         </tr>
                     </thead>
                     <tbody>
+                        {users.length === 0 && <Spinner />}
                         {users.map(user => <UserListItem 
                         key={user._id} 
                         onInfo={showUserDetailsHandler}
